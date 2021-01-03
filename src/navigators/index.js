@@ -1,13 +1,18 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faHome, faComments, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {
+  faHome,
+  faComments,
+  faUser,
+  faUsers,
+} from '@fortawesome/free-solid-svg-icons';
 
-import { HomeNavigator } from './Home';
-import { ChatNavigator } from './Chat';
-import { UsersManagerNavigator } from './UserManager';
-import { UserNavigator } from './User';
+import {HomeNavigator} from './Home';
+import {ChatNavigator} from './Chat';
+import {UsersManagerNavigator} from './UserManager';
+import {UserNavigator} from './User';
 
 const Tab = createBottomTabNavigator();
 
@@ -19,8 +24,11 @@ function MyTabs() {
         component={HomeNavigator}
         options={{
           tabBarLabel: 'Home',
-          tabBarIcon: ({ focused }) => (
-            <FontAwesomeIcon icon={faHome} style={{ fontSize: 20, color: focused ? 'blue' : 'black' }} />
+          tabBarIcon: ({focused}) => (
+            <FontAwesomeIcon
+              icon={faHome}
+              style={{fontSize: 20, color: focused ? 'blue' : 'black'}}
+            />
           ),
         }}
       />
@@ -29,8 +37,11 @@ function MyTabs() {
         component={ChatNavigator}
         options={{
           tabBarLabel: 'Chat',
-          tabBarIcon: ({ focused }) => (
-            <FontAwesomeIcon icon={faComments} style={{ fontSize: 20, color: focused ? 'blue' : 'black' }} />
+          tabBarIcon: ({focused}) => (
+            <FontAwesomeIcon
+              icon={faComments}
+              style={{fontSize: 20, color: focused ? 'blue' : 'black'}}
+            />
           ),
         }}
       />
@@ -39,8 +50,11 @@ function MyTabs() {
         component={UsersManagerNavigator}
         options={{
           tabBarLabel: 'Users manager',
-          tabBarIcon: ({ focused }) => (
-            <FontAwesomeIcon icon={faUsers} style={{ fontSize: 20, color: focused ? 'blue' : 'black' }} />
+          tabBarIcon: ({focused}) => (
+            <FontAwesomeIcon
+              icon={faUsers}
+              style={{fontSize: 20, color: focused ? 'blue' : 'black'}}
+            />
           ),
         }}
       />
@@ -49,13 +63,16 @@ function MyTabs() {
         component={UserNavigator}
         options={{
           tabBarLabel: 'User',
-          tabBarIcon: ({ focused }) => (
-            <FontAwesomeIcon icon={faUser} style={{ fontSize: 20, color: focused ? 'blue' : 'black' }} />
+          tabBarIcon: ({focused}) => (
+            <FontAwesomeIcon
+              icon={faUser}
+              style={{fontSize: 20, color: focused ? 'blue' : 'black'}}
+            />
           ),
-        }} 
+        }}
       />
     </Tab.Navigator>
   );
 }
 
-export { MyTabs };
+export {MyTabs};

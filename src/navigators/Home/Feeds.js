@@ -1,11 +1,25 @@
 import React from 'react';
-import {View, Text, ScrollView} from 'react-native';
+import {View, Text, ScrollView, TouchableOpacity} from 'react-native';
 import {Card, Title, Paragraph} from 'react-native-paper';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconOc from 'react-native-vector-icons/Octicons';
+import {firebase} from '../../firebase/Firebase';
 
-const HomeNavigator = ({navigation}) => {
+const Feeds = ({navigation}) => {
+  const [feeds, setFeeds] = React.useState();
+
+  React.useEffect(() => {
+    firebase.default
+      .database()
+      .ref('/posts')
+      .on('value', (snapshot) => {
+        if (snapshot.val()) {
+          setFeeds(snapshot.val());
+        }
+      });
+  }, []);
+
   return (
     <View
       style={{
@@ -30,21 +44,31 @@ const HomeNavigator = ({navigation}) => {
           color="rgb(108, 108, 139)"
           size={20}
           style={{fontSize: 25}}
-          onPress={() => navigation.navigate('Home')}
+          onPress={() => navigation.navigate('CreateFeed')}
         />
       </View>
 
-      <ScrollView>
-        <Card>
-          <Card.Cover source={{uri: 'https://picsum.photos/700'}} />
-          <Card.Content>
-            <Title>Card title</Title>
-            <Paragraph>Card content</Paragraph>
-          </Card.Content>
-        </Card>
-      </ScrollView>
+      {feeds ? (
+        <ScrollView>
+          {Object.keys(feeds).map((key) => (
+            <TouchableOpacity
+              key={key}
+              onPress={() => navigation.navigate('Detail', feeds[key])}>
+              <Card>
+                <Card.Cover source={{uri: feeds[key].image.uri}} />
+                <Card.Content>
+                  <Title>{feeds[key].title}</Title>
+                  <Paragraph>{feeds[key].description}</Paragraph>
+                </Card.Content>
+              </Card>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      ) : (
+        <Text>Loading...</Text>
+      )}
     </View>
   );
 };
 
-export {HomeNavigator};
+export {Feeds};

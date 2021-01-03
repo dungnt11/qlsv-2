@@ -1,32 +1,33 @@
 import React from 'react';
-import { Text, ImageBackground, View } from 'react-native';
+import {Text, ImageBackground, View} from 'react-native';
 
-import { width, height } from '../utils/Dimensions';
+import {width, height} from '../utils/Dimensions';
 
-const Started = ({ navigation }) => {
+const Started = ({navigation}) => {
   return (
     <ImageBackground
-      source={require("../images/back.png")}
-      style={{ width: "100%", height: "100%" }}
-    >
-      <View style={{
-        width,
-        height,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingLeft: 20,
-        paddingRight: 20
-      }}>
-        <Text style={{
-          fontSize: 40,
-          color: 'white',
-          backgroundColor: 'rgb(93, 27, 172)',
-          padding: 10,
+      source={require('../images/back.png')}
+      style={{width: '100%', height: '100%'}}>
+      <View
+        style={{
+          width,
+          height,
+          alignItems: 'center',
+          justifyContent: 'center',
           paddingLeft: 20,
           paddingRight: 20,
-          borderRadius: 10,
-          overflow: 'hidden',
         }}>
+        <Text
+          style={{
+            fontSize: 40,
+            color: 'white',
+            backgroundColor: 'rgb(93, 27, 172)',
+            padding: 10,
+            paddingLeft: 20,
+            paddingRight: 20,
+            borderRadius: 10,
+            overflow: 'hidden',
+          }}>
           hi
         </Text>
 
@@ -36,10 +37,10 @@ const Started = ({ navigation }) => {
             marginTop: 200,
             color: '#fff',
             textAlign: 'center',
-            lineHeight: 23
-          }}
-        >
-          Hãy bắt đầu để kết nối với chúng tôi. Chúng tôi có mọi vấn đề mà bạn tìm kiếm.
+            lineHeight: 23,
+          }}>
+          Hãy bắt đầu để kết nối với chúng tôi. Chúng tôi có mọi vấn đề mà bạn
+          tìm kiếm.
         </Text>
 
         <Text
@@ -51,11 +52,12 @@ const Started = ({ navigation }) => {
             marginTop: 30,
             overflow: 'hidden',
           }}
-          onPress={() => navigation.navigate('Auth')}
-        >Bắt đầu</Text>
+          onPress={() => navigation.navigate('Auth')}>
+          Bắt đầu
+        </Text>
       </View>
     </ImageBackground>
-    )
-}
+  );
+};
 
-export { Started };
+export {Started};

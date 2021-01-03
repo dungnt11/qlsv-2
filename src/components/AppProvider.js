@@ -1,5 +1,5 @@
 import React from 'react';
-import { firebase } from '../firebase/config';
+import { firebase } from '../firebase/Firebase';
 
 export const AuthContext = React.createContext();
 
@@ -14,6 +14,8 @@ export const AuthProvider = ({ children }) => {
         user,
         loading,
         error,
+        setError,
+        setLoading,
         login: async (email, password) => {
           setError('');
           if (!email) {
@@ -27,49 +29,50 @@ export const AuthProvider = ({ children }) => {
           setLoading(true);
           try {
             const res = await firebase.default.auth().signInWithEmailAndPassword(email, password);
-
-            setUser({
-              name: res.user.displayName || 'No Name',
-              email: res.user.email,
-              avatar: res.user.photoURL || 'https://grandimageinc.com/wp-content/uploads/2015/09/icon-user-default.png',
-              id: res.user.uid,
-              _id: res.user.uid
-            });
-            setLoading(false);
+            await firebase.default
+              .database()
+              .ref('users')
+              .orderByChild('email')
+              .equalTo(email)
+              .on('value', (snapshot) => {
+                if (snapshot.val()) {
+                  const user = Object.values(snapshot.val())[0];
+                  const id = Object.keys(snapshot.val())[0];
+                  setUser({
+                    name: user.fullName,
+                    email: user.email,
+                    avatar: user.avatar,
+                    description: user.description,
+                    id: id,
+                    _id: id,
+                  });
+                  setLoading(false);
+                }
+              });
           } catch (e) {
             console.log(e);
             setError('Tên đăng nhập hoặc mật khẩu sai!');
             setLoading(false);
           }
         },
-        register: async (email, password, rePassword) => {
-          setError('');
-
-          if (!email) {
-            setError('Bạn phải điền tên đăng nhập!');
+        register: async (fullName, email, password, description, urlAvatar) => {
+          if (error) {
             return;
           }
-          if (!password) {
-            setError('Bạn phải điền mật khẩu!');
-            return;
-          }
-
-          if (password !== rePassword) {
-            setError('Hai mật khẩi phải giống nhau!');
-            return;
-          }
-
-          setLoading(true);
           try {
             const res = await firebase.default.auth().createUserWithEmailAndPassword(email, password);
-            setLoading(false);
-
+            await firebase.default.database().ref('/users').push({
+              fullName,
+              email,
+              description,
+              avatar: urlAvatar,
+            });
             return {
-              name: res.user.displayName || 'No Name',
+              name: fullName,
               email: res.user.email,
-              avatar: res.user.photoURL || 'https://grandimageinc.com/wp-content/uploads/2015/09/icon-user-default.png',
+              avatar: urlAvatar || 'https://grandimageinc.com/wp-content/uploads/2015/09/icon-user-default.png',
               id: res.user.uid,
-              _id: res.user.uid
+              _id: res.user.uid,
             };
           } catch (e) {
             console.log(e);
