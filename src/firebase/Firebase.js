@@ -28,6 +28,7 @@ class Firebase {
   }
 
   async uploadFile(path, type, uri) {
+    console.log({ path, type, uri });
     const storageRef = firebase.default.storage().ref().child(path);
 
     const blob = await urlToBlob(uri);
@@ -44,19 +45,6 @@ class Firebase {
       console.log(e);
       return '';
     }
-  }
-
-  async createDB(dbName) {
-    return new Promise((resolve) => {
-      firebase.default
-        .database()
-        .ref('/chat')
-        .on('value', (snapshot) => {
-          if (snapshot.val()) {
-            resolve(snapshot.val());
-          }
-        });
-    });
   }
 }
 
