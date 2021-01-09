@@ -14,9 +14,14 @@ import {ChatNavigator} from './Chat';
 import {UsersManagerNavigator} from './UserManager';
 import {UserNavigator} from './User';
 
+import {AuthContext} from '../components/AppProvider';
+
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
+  const {user} = React.useContext(AuthContext);
+
+
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -45,19 +50,21 @@ function MyTabs() {
           ),
         }}
       />
-      <Tab.Screen
-        name="Users manager"
-        component={UsersManagerNavigator}
-        options={{
-          tabBarLabel: 'Users manager',
-          tabBarIcon: ({focused}) => (
-            <FontAwesomeIcon
-              icon={faUsers}
-              style={{fontSize: 20, color: focused ? 'blue' : 'black'}}
-            />
-          ),
-        }}
-      />
+      { user?.email === 'admin@gmail.com' ? (
+        <Tab.Screen
+          name="Users manager"
+          component={UsersManagerNavigator}
+          options={{
+            tabBarLabel: 'Users manager',
+            tabBarIcon: ({focused}) => (
+              <FontAwesomeIcon
+                icon={faUsers}
+                style={{fontSize: 20, color: focused ? 'blue' : 'black'}}
+              />
+            ),
+          }}
+        />
+      ) : null }
       <Tab.Screen
         name="User"
         component={UserNavigator}

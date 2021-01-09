@@ -1,4 +1,5 @@
 import React from 'react';
+import { AsyncStorage } from 'react-native';
 import { firebase } from '../firebase/Firebase';
 
 export const AuthContext = React.createContext();
@@ -11,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        user,
+        user, setUser,
         loading,
         error,
         setError,
@@ -34,18 +35,30 @@ export const AuthProvider = ({ children }) => {
               .ref('users')
               .orderByChild('email')
               .equalTo(email)
-              .on('value', (snapshot) => {
+              .on('value', async (snapshot) => {
                 if (snapshot.val()) {
                   const user = Object.values(snapshot.val())[0];
                   const id = Object.keys(snapshot.val())[0];
-                  setUser({
+
+                  const newUser = {
                     name: user.fullName,
                     email: user.email,
                     avatar: user.avatar,
                     description: user.description,
                     id: id,
                     _id: id,
-                  });
+                  };
+
+                  setUser(newUser);
+                  try {
+                    await AsyncStorage.setItem(
+                      'login',
+                      JSON.stringify(newUser)
+                    );
+                  } catch (error) {
+                    console.log(error);
+                  }
+
                   setLoading(false);
                 }
               });

@@ -1,9 +1,30 @@
 import React from 'react';
+import { AsyncStorage } from 'react-native';
 import {Text, ImageBackground, View} from 'react-native';
+import {AuthContext} from '../components/AppProvider';
 
 import {width, height} from '../utils/Dimensions';
 
 const Started = ({navigation}) => {
+  const {setUser} = React.useContext(AuthContext);
+
+  React.useState(() => {
+    (async () => {
+      try {
+        const value = await AsyncStorage.getItem('login');
+        if (value !== null) {
+          // We have data!!
+          if (value) {
+            const user = JSON.parse(value);
+            setUser(user);
+          }
+        }
+      } catch (error) {
+        // Error retrieving data
+      }
+    })();
+  }, []);
+
   return (
     <ImageBackground
       source={require('../images/back.png')}
