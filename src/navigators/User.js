@@ -6,9 +6,13 @@ import { AsyncStorage } from 'react-native';
 import { AuthContext } from '../components/AppProvider';
 import { DateChecked } from '../components/DateChecked';
 
+const formatter = new Intl.NumberFormat('vi-VN', {
+  style: 'currency',
+  currency: 'VND',
+});
+
 const UserNavigator = () => {
   const { user, logout } = React.useContext(AuthContext);
-  const dateWork = [1, 3, 10, 20, 22, 23];
   return (
     <ImageBackground
       source={require('../images/profile.png')}
@@ -20,7 +24,7 @@ const UserNavigator = () => {
         style={{
           marginTop: 100,
           backgroundColor: '#fff',
-          height: 600,
+          height: 550,
           alignItems: 'center',
           borderRadius: 40,
           marginHorizontal: 20,
@@ -30,8 +34,8 @@ const UserNavigator = () => {
         <Image
           source={{ uri: user.avatar }}
           style={{
-            width: 120,
-            height: 120,
+            width: 70,
+            height: 70,
             borderRadius: 50,
             borderColor: '#000',
             borderWidth: 1,
@@ -85,7 +89,7 @@ const UserNavigator = () => {
             fontSize: 15
           }}
         >Chấm công tháng {(new Date).getMonth() + 1}</Text>
-        <DateChecked dateChecked={dateWork} />
+        <DateChecked dateChecked={user.dayToWork} />
 
       </View>
       <View
@@ -93,23 +97,21 @@ const UserNavigator = () => {
           backgroundColor: '#fff',
           marginHorizontal: 20,
           marginTop: 10,
-          height: 100,
+          height: 150,
           borderRadius: 20,
-          paddingHorizontal: 10
+          paddingHorizontal: 10,
+          justifyContent: 'center',
+          alignItems: 'center'
         }}
       >
-        <Text
-          style={{
-            textAlign: 'center',
-            marginTop: 10
-          }}
-        >Thống kê</Text>
-        <Text
-          style={{
-            marginTop: 10
-          }}
-        >- Số ngày đi làm {dateWork.length}</Text>
-        <Text>- Tiền lương {8 * 20 * dateWork.length}k (20k/1h)</Text>
+        <Text>Phòng {user.room}</Text>
+        <Text>Công {user.dayToWork.length}</Text>
+        <Text>Hệ số lương {formatter.format(user.salary)}</Text>
+        <Text>Thưởng {formatter.format(user.bonus)}</Text>
+        <Text>Phạt {formatter.format(user.fine)}</Text>
+        <Text>Lương tháng {formatter.format(
+          +user.salary * 8 * +(user.dayToWork || []).length + +user.bonus - +user.fine
+        )}</Text>
       </View>
     </ImageBackground>
   );

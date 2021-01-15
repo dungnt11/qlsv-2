@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, Text, TextInput, Image} from 'react-native';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
+import { View, Text, TextInput, Image } from 'react-native';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 import Icon from 'react-native-vector-icons/EvilIcons';
 import IconEntypo from 'react-native-vector-icons/Entypo';
 import IconAnt from 'react-native-vector-icons/AntDesign';
@@ -8,14 +8,14 @@ import IconEvil from 'react-native-vector-icons/EvilIcons';
 import IconAwesome from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'react-native-image-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {TextInput as TextInputPaper} from 'react-native-paper';
+import { Checkbox } from 'react-native-paper';
 import * as uuid from 'uuid';
-import {height} from '../../utils/Dimensions';
-import firebaseInstance, {firebase} from '../../firebase/Firebase';
+import { height } from '../../utils/Dimensions';
+import firebaseInstance, { firebase } from '../../firebase/Firebase';
 import { AuthContext } from '../../components/AppProvider';
 
-const CreateFeed = ({navigation}) => {
-  const {user} = React.useContext(AuthContext);
+const CreateFeed = ({ navigation }) => {
+  const { user } = React.useContext(AuthContext);
 
   const [title, setTitle] = React.useState('');
   const [description, setDescription] = React.useState('');
@@ -24,11 +24,10 @@ const CreateFeed = ({navigation}) => {
   const [imagePost, setImagePost] = React.useState();
   const [images, setImages] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-  const [url, setUrl] = React.useState('');
-  const [toggleUrl, setToggleUrl] = React.useState(false);
+  const [ghim, toggleGhim] = React.useState(false);
 
   const changeBackgroundPost = () => {
-    let options = {mediaType: 'camera'};
+    let options = { mediaType: 'camera' };
     ImagePicker.launchImageLibrary(options, (response) => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -41,7 +40,7 @@ const CreateFeed = ({navigation}) => {
   };
 
   const addImages = async () => {
-    let options = {mediaType: 'camera'};
+    let options = { mediaType: 'camera' };
     ImagePicker.launchImageLibrary(options, (response) => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -96,7 +95,7 @@ const CreateFeed = ({navigation}) => {
       newPost.title = title;
       newPost.description = description;
       newPost.contentPost = contentPost;
-      newPost.url = url;
+      newPost.ghim = ghim;
       newPost.user = user.email;
 
       await firebase.default.database().ref('/posts').push(newPost);
@@ -126,16 +125,16 @@ const CreateFeed = ({navigation}) => {
           <Icon
             name="close"
             color="rgb(108, 108, 139)"
-            style={{fontSize: 30}}
+            style={{ fontSize: 30 }}
             onPress={() => navigation.navigate('Feeds')}
           />
 
-          <Text style={{fontSize: 17}}>Tạo bài viết mới</Text>
+          <Text style={{ fontSize: 17 }}>Tạo bài viết mới</Text>
 
           <IconEntypo
             name="dots-three-vertical"
             color="rgb(108, 108, 139)"
-            style={{fontSize: 20}}
+            style={{ fontSize: 20 }}
           />
         </View>
 
@@ -144,7 +143,7 @@ const CreateFeed = ({navigation}) => {
           onChangeText={(title) => setTitle(title)}
           placeholder="Tiêu đề"
           placeholderTextColor="rgb(173, 173, 173)"
-          style={{marginTop: 25}}
+          style={{ marginTop: 25 }}
         />
 
         <TextInput
@@ -152,7 +151,7 @@ const CreateFeed = ({navigation}) => {
           onChangeText={(description) => setDescription(description)}
           placeholder="Mô tả"
           placeholderTextColor="rgb(173, 173, 173)"
-          style={{marginTop: 25}}
+          style={{ marginTop: 25 }}
         />
 
         <TextInput
@@ -165,7 +164,7 @@ const CreateFeed = ({navigation}) => {
         />
       </View>
 
-      <View style={{marginBottom: 150}}>
+      <View style={{ marginBottom: 150 }}>
         <View>
           <IconAnt
             name="plus"
@@ -184,7 +183,7 @@ const CreateFeed = ({navigation}) => {
           />
           {imagePost ? (
             <Image
-              source={{uri: imagePost.uri}}
+              source={{ uri: imagePost.uri }}
               style={{
                 height: 150,
                 marginTop: 10,
@@ -193,7 +192,7 @@ const CreateFeed = ({navigation}) => {
             />
           ) : null}
         </View>
-        <View style={{marginTop: 30}}>
+        <View style={{ marginTop: 30 }}>
           <View>
             <View>
               <IconEvil
@@ -218,9 +217,9 @@ const CreateFeed = ({navigation}) => {
                   marginHorizontal: -5,
                 }}>
                 {images.map((image, ind) => (
-                  <View key={image.uri} style={{position: 'relative'}}>
+                  <View key={image.uri} style={{ position: 'relative' }}>
                     <Image
-                      source={{uri: image.uri}}
+                      source={{ uri: image.uri }}
                       style={{
                         height: 100,
                         width: 100,
@@ -245,35 +244,34 @@ const CreateFeed = ({navigation}) => {
                 ))}
               </View>
             </View>
-            <IconEvil
-              name="link"
-              color="rgb(108, 108, 139)"
+
+            <View
               style={{
-                fontSize: 30,
-                backgroundColor: toggleUrl ? '#ccc' : '#e8e8e8',
-                textAlign: 'center',
-                width: 40,
-                height: 40,
-                lineHeight: 40,
-                borderRadius: 4,
-                overflow: 'hidden',
-                marginTop: 20,
+                flexDirection: 'row',
+                alignItems: 'center',
               }}
-              onPress={() => setToggleUrl(!toggleUrl)}
-            />
-            {toggleUrl ? (
-              <TextInputPaper
-                label="URL liên quan"
-                value={url}
-                onChangeText={(url) => setUrl(url)}
+            >
+              <IconEvil
+                name="tag"
+                color="rgb(108, 108, 139)"
                 style={{
-                  marginTop: 15,
-                  padding: 0,
-                  backgroundColor: '#fff',
-                  marginBottom: 15,
+                  fontSize: 30,
+                  backgroundColor: '#e8e8e8',
+                  textAlign: 'center',
+                  width: 40,
+                  height: 40,
+                  lineHeight: 40,
+                  borderRadius: 4,
+                  overflow: 'hidden',
                 }}
               />
-            ) : null}
+              <Checkbox
+                color='red'
+                status={ghim ? 'checked' : 'unchecked'}
+                onPress={() => toggleGhim(!ghim)}
+              />
+            </View>
+
           </View>
 
           <Text
@@ -298,4 +296,4 @@ const CreateFeed = ({navigation}) => {
   );
 };
 
-export {CreateFeed};
+export { CreateFeed };

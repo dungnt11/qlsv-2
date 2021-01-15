@@ -40,14 +40,18 @@ export const AuthProvider = ({ children }) => {
                 if (snapshot.val()) {
                   const user = Object.values(snapshot.val())[0];
                   const id = Object.keys(snapshot.val())[0];
-
                   const newUser = {
+                    id: id,
+                    _id: id,
                     name: user.fullName,
                     email: user.email,
                     avatar: user.avatar,
                     description: user.description,
-                    id: id,
-                    _id: id,
+                    salary: user.salary,
+                    bonus: user.bonus,
+                    fine: user.fine,
+                    dayToWork: user.dayToWork,
+                    room: user.room,
                   };
 
                   setUser(newUser);
