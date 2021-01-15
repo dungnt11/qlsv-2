@@ -7,16 +7,17 @@ export const AuthContext = React.createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
+  const [loadingDeleteUser, setLoadingDeleteUser] = React.useState(false);
   const [error, setError] = React.useState('');
 
   return (
     <AuthContext.Provider
       value={{
         user, setUser,
-        loading,
+        loading, setLoading,
+        loadingDeleteUser, setLoadingDeleteUser,
         error,
         setError,
-        setLoading,
         login: async (email, password) => {
           setError('');
           if (!email) {
@@ -68,30 +69,33 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
           }
         },
-        register: async (fullName, email, password, description, urlAvatar) => {
+        register: async (
+          fullName,
+          email,
+          password,
+          description,
+          urlAvatar,
+          salary,
+          bonus,
+          fine,
+          dayToWork,
+          room,
+        ) => {
           if (error) {
             return;
           }
-          try {
-            const res = await firebase.default.auth().createUserWithEmailAndPassword(email, password);
-            await firebase.default.database().ref('/users').push({
-              fullName,
-              email,
-              description,
-              avatar: urlAvatar,
-            });
-            return {
-              name: fullName,
-              email: res.user.email,
-              avatar: urlAvatar || 'https://grandimageinc.com/wp-content/uploads/2015/09/icon-user-default.png',
-              id: res.user.uid,
-              _id: res.user.uid,
-            };
-          } catch (e) {
-            console.log(e);
-            setError('Không thể đăng kí tài khoản!');
-            setLoading(false);
-          }
+          await firebase.default.auth().createUserWithEmailAndPassword(email, password);
+          await firebase.default.database().ref('/users').push({
+            fullName,
+            email,
+            description,
+            avatar: urlAvatar,
+            salary,
+            bonus,
+            fine,
+            dayToWork,
+            room,
+          });
         },
         logout: async () => {
           setError('');

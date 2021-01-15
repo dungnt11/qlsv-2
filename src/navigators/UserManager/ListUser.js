@@ -1,15 +1,16 @@
 import React from 'react';
-import {Text, View, Alert} from 'react-native';
-import {DataTable} from 'react-native-paper';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
+import { Text, View, Alert } from 'react-native';
+import { DataTable } from 'react-native-paper';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 import IconOc from 'react-native-vector-icons/Octicons';
 import IconIon from 'react-native-vector-icons/Ionicons';
-import {firebase} from '../../firebase/Firebase';
+import { firebase } from '../../firebase/Firebase';
 
-const ListUser = ({navigation}) => {
+const ListUser = ({ navigation }) => {
   const [listUser, setListUser] = React.useState();
 
   React.useEffect(() => {
+
     firebase.default
       .database()
       .ref('users')
@@ -21,7 +22,7 @@ const ListUser = ({navigation}) => {
   }, []);
 
   return (
-    <View style={{marginTop: getStatusBarHeight(), marginHorizontal: 20}}>
+    <View style={{ marginTop: getStatusBarHeight(), marginHorizontal: 20 }}>
       <View
         style={{
           flexDirection: 'row',
@@ -32,14 +33,14 @@ const ListUser = ({navigation}) => {
           name="settings"
           color="rgb(108, 108, 139)"
           size={20}
-          style={{fontSize: 25}}
+          style={{ fontSize: 25 }}
         />
-        <Text style={{fontSize: 20}}>Quản lý nhân viên</Text>
+        <Text style={{ fontSize: 20 }}>Quản lý nhân viên</Text>
         <IconIon
           name="md-person-add-outline"
           color="rgb(108, 108, 139)"
           size={20}
-          style={{fontSize: 25}}
+          style={{ fontSize: 25 }}
           onPress={() => navigation.navigate('CreateUser')}
         />
       </View>
@@ -54,7 +55,7 @@ const ListUser = ({navigation}) => {
             <DataTable.Row key={key}>
               <DataTable.Cell>{listUser[key].email}</DataTable.Cell>
               <DataTable.Cell>
-                <View style={{alignItems: 'center', flexDirection: 'row'}}>
+                <View style={{ alignItems: 'center', flexDirection: 'row' }}>
                   <View>
                     <IconIon
                       size={20}
@@ -73,7 +74,7 @@ const ListUser = ({navigation}) => {
                       }}
                     />
                   </View>
-                  <View style={{paddingLeft: 20}}>
+                  <View style={{ paddingLeft: 20 }}>
                     <IconIon
                       size={30}
                       name="close"
@@ -98,10 +99,10 @@ const ListUser = ({navigation}) => {
           ))}
         </DataTable>
       ) : (
-        <Text>Loading...</Text>
-      )}
+          <Text>Loading...</Text>
+        )}
     </View>
   );
 };
 
-export {ListUser};
+export { ListUser };

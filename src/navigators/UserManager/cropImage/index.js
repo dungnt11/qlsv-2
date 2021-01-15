@@ -2,22 +2,25 @@ import React, { Component } from 'react';
 import { Dimensions } from 'react-native';
 import AmazingCropper from 'react-native-amazing-cropper';
 import CustomCropperFooter from './defaultFooter';
- 
+
 class AmazingCropperPage extends Component {
   onDone = async (croppedImageUri) => {
     if (croppedImageUri) {
-      this.props.navigation.navigate('CreateUser', { uri: croppedImageUri });
+      const { route } = this.props;
+      const { onChangeState } = route.params;
+      onChangeState(croppedImageUri);
+      this.props.navigation.navigate('CreateUser');
     }
   }
- 
+
   onError = (err) => {
     console.log(err);
   }
- 
+
   onCancel = () => {
     this.props.navigation.navigate('CreateUser');
   }
- 
+
   render() {
     const { route } = this.props;
     const { width, height, uri } = route.params;
